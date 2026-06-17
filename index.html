@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chess Analyzer</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header class="header">
+            <div class="title-container">
+                <h1 class="title">Chess Analyzer</h1>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li>
+                        <a href="">Home</a>
+                    </li>
+                    <li>
+                        <a href="">About</a>
+                    </li>
+                    <li>
+                        <a href="">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <hr class="horizontal-divider" />
+        <div class="content">
+            <p>
+                <span style="color: #0d530e; font-weight: 750"
+                    >The Chess Analyzer</span
+                >
+                is a powerful tool powered by the Stockfish engine — one of the
+                strongest and most widely used chess engines in the world. To
+                use it, simply paste the PGN (Portable Game Notation) file of
+                your played game, and the bot will thoroughly analyze every move
+                made throughout the match. Each move is then categorized and
+                color-coded based on its quality:
+                <span style="font-weight: 600" class="brilliant"
+                    >Brilliant</span
+                >
+                moves are highlighted in cyan,
+                <span style="font-weight: 600" class="great">Great</span>
+                moves in violet-blue,
+                <span style="font-weight: 600" class="best">Best</span>
+                moves and
+                <span style="font-weight: 600" class="excellent"
+                    >Excellent</span
+                >
+                moves in green, and
+                <span style="font-weight: 600" class="good">Good</span>
+                moves in light green. Moves that follow well-known opening
+                theory are marked as
+                <span style="font-weight: 600" class="book">Book</span>
+                moves in light brown. On the other end of the spectrum,
+                <span style="font-weight: 600" class="inaccuracy"
+                    >Inaccuracies</span
+                >
+                are flagged in yellow,
+                <span style="font-weight: 600" class="mistake">Mistakes</span>
+                in light orange,
+                <span style="font-weight: 600" class="miss">Misses</span> in
+                light red, and
+                <span style="font-weight: 600" class="blunder">Blunders</span>
+                — the most costly errors — are marked in bold red. This
+                color-coded breakdown gives players a clear and intuitive visual
+                overview of their performance, helping them identify strengths,
+                spot critical errors, and continuously improve their game.
+            </p>
+        </div>
+        <div class="main-container">
+            <div class="input-container">
+                <input
+                    type="text"
+                    class="input"
+                    placeholder="Enter PGN file..."
+                />
+            </div>
+            <div class="board">
+                <div class="board-options">
+                    <div class="options-container">
+                        <button class="options-button"></button>
+                        <div class="options">
+                            <button class="flip-button"></button>
+                            <button class="reset"></button>
+                        </div>
+                    </div>
+                    <div class="chess-board" id="chess-board"></div>
+                </div>
+
+                <div class="button-container">
+                    <button class="analyze-button">Analyze</button>
+                    <div class="arrow-buttons">
+                        <button class="start-button"></button>
+                        <button class="previous-button"></button>
+                        <button class="next-button"></button>
+                        <button class="end-button"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+        <script src="openings.js"></script>
+    </body>
+</html>
