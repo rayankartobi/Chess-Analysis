@@ -653,7 +653,6 @@ a:focus::after {
     z-index: 1;
     border: none;
     background: none;
-    cursor: pointer;
     scale: 0.08;
 }
 
@@ -739,166 +738,369 @@ a:focus::after {
     }
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
-.chess-board {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-template-rows: repeat(8, minmax(0, 1fr));
-    width: min(560px, 94vw);
-    height: min(560px, 94vw);
-}
-
-.square {
-    width: 100%;
-    height: 100%;
-}
-
-.square img {
-    width: 88%;
-    height: 88%;
-}
-
-.square.highlight-great::after,
-.square.highlight-best::after,
-.square.highlight-excellent::after,
-.square.highlight-good::after,
-.square.highlight-book::after {
-    scale: calc(0.014 * (min(560px, 94vw) / 560px) * 6);
-    top: calc(-42.5px * (min(560px, 94vw) / 560px));
-    left: calc(15px * (min(560px, 94vw) / 560px));
-}
-
-.square.highlight-inaccuracy::after,
-.square.highlight-mistake::after,
-.square.highlight-miss::after,
-.square.highlight-blunder::after {
-    scale: calc(0.015 * (min(560px, 94vw) / 560px) * 6);
-    top: calc(-42.5px * (min(560px, 94vw) / 560px));
-    left: calc(15px * (min(560px, 94vw) / 560px));
-}
-
 @media (max-width: 850px) {
-    .title-container {
-        margin-left: 20px;
+    .navbar {
+        padding: 14px;
+        gap: 18px;
+        font-size: 15px;
     }
+
+    .title-container {
+        margin-left: 60px;
+    }
+
     .title {
-        font-size: 26px;
-        padding-left: 12px;
+        font-size: 28px;
+        padding-left: 100px;
         padding-top: 10px;
         padding-bottom: 10px;
     }
-    .navbar {
-        padding: 10px 12px;
-        gap: 10px;
-        font-size: 14px;
-    }
-    li {
-        margin-left: 12px;
-    }
+
     .content {
-        padding: 12px;
+        padding: 14px;
         font-size: 15px;
     }
+
+    .brilliant:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .great:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .best:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .excellent:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .good:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .book:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .inaccuracy:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .mistake:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .miss:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .blunder:hover {
+        background-size: 17px 17px;
+        padding-left: 20px;
+    }
+
+    .chess-board {
+        grid-template-columns: repeat(8, 54px);
+        grid-template-rows: repeat(8, 54px);
+    }
+
+    .square {
+        width: 54px;
+        height: 54px;
+    }
+
+    .square img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .square.highlight-forced::after {
+        top: -27px;
+        left: 17px;
+        scale: 0.155;
+    }
+
+    .square.highlight-brilliant::before {
+        top: -12px;
+        left: 18px;
+        font-size: 11px;
+    }
+
+    .square.highlight-brilliant::after {
+        scale: 0.023;
+    }
+
+    .square.highlight-great::after,
+    .square.highlight-best::after,
+    .square.highlight-excellent::after,
+    .square.highlight-good::after,
+    .square.highlight-book::after,
+    .square.highlight-inaccuracy::after,
+    .square.highlight-mistake::after,
+    .square.highlight-miss::after,
+    .square.highlight-blunder::after {
+        top: -33px;
+        left: 11px;
+        scale: 0.011;
+    }
+
+    .main-container {
+        gap: 14px;
+    }
+
+    .board {
+        gap: 14px;
+    }
+
     .input-container {
-        width: 90vw;
+        width: 380px;
     }
-    .button-container {
-        gap: 24px;
-        flex-wrap: wrap;
-        justify-content: center;
+
+    .input {
+        line-height: 42px;
+        font-size: 14px;
+        padding-left: 14px;
     }
+
     .analyze-button,
     .next-button,
     .previous-button,
-    .start-button,
-    .end-button {
-        padding: 11px 24px;
+    .end-button,
+    .start-button {
+        padding: 11px 34px;
         font-size: 14px;
+        box-shadow: 1.5px 2px 1px black;
     }
+
+    .button-container {
+        gap: 120px;
+    }
+
     .arrow-buttons {
-        gap: 12px;
+        gap: 14px;
     }
+
     .board-options {
-        gap: 60px;
+        gap: 55px;
     }
-    .options {
-        gap: 100px;
+
+    .options-container {
+        padding: 11px 9.5px;
+        gap: 70px;
+    }
+
+    .options-container::before {
+        width: 240%;
+    }
+
+    .options-button {
+        scale: 0.065;
+    }
+
+    .flip-button,
+    .reset {
+        scale: 0.08;
+    }
+
+    li {
+        margin-left: 34px;
     }
 }
 
 @media (max-width: 600px) {
+    .navbar {
+        padding: 10px;
+        gap: 12px;
+        font-size: 13px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
     .header {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
-        gap: 4px;
     }
     .title-container {
-        margin-left: 8px;
+        margin-left: 10px;
     }
     .title {
-        position: static;
-        font-size: 22px;
-        padding: 8px 0 0 8px;
-    }
-    .navbar {
-        width: 100%;
-        justify-content: center;
-        padding: 6px 8px;
-        gap: 6px;
-        font-size: 13px;
-    }
-    li {
-        margin-left: 6px;
+        font-size: 35px;
+        padding-left: 10px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        position: relative;
     }
     .content {
         padding: 8px;
         font-size: 13px;
     }
+    .brilliant:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .great:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .best:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .excellent:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .good:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .book:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .inaccuracy:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .mistake:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .miss:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .blunder:hover {
+        background-size: 16px 16px;
+        padding-left: 18px;
+    }
+    .chess-board {
+        grid-template-columns: repeat(8, 48px);
+        grid-template-rows: repeat(8, 48px);
+        border-radius: 6px;
+    }
+    .square {
+        width: 48px;
+        height: 48px;
+        border-radius: 2px;
+    }
+    .square img {
+        width: 42px;
+        height: 42px;
+    }
+    .square.highlight-forced::after {
+        top: -24px;
+        left: 15px;
+        scale: 0.14;
+    }
+    .square.highlight-brilliant::before {
+        top: -12px;
+        left: 14px;
+        font-size: 10px;
+        padding: 1px 3px;
+    }
+    .square.highlight-brilliant::after {
+        scale: 0.02;
+    }
+    .square.highlight-great::after,
+    .square.highlight-best::after,
+    .square.highlight-excellent::after,
+    .square.highlight-good::after,
+    .square.highlight-book::after,
+    .square.highlight-inaccuracy::after,
+    .square.highlight-mistake::after,
+    .square.highlight-miss::after,
+    .square.highlight-blunder::after {
+        top: -30px;
+        left: 10px;
+        scale: 0.01;
+    }
+    .main-container {
+        gap: 8px;
+    }
+    .board {
+        gap: 20px;
+    }
     .input-container {
-        width: 95vw;
+        width: 90vw;
     }
     .input {
+        line-height: 36px;
         font-size: 13px;
-        line-height: 40px;
-    }
-    .button-container {
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
+        padding-left: 10px;
     }
     .analyze-button,
     .next-button,
     .previous-button,
-    .start-button,
-    .end-button {
-        padding: 9px 18px;
-        font-size: 13px;
+    .end-button,
+    .start-button {
+        padding: 11px 26px;
+        font-size: 14px;
+        border-radius: 30px;
         box-shadow: 1px 1.5px 1px black;
+    }
+    .button-container {
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     .arrow-buttons {
         gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     .board-options {
         gap: 40px;
     }
-    .options {
-        gap: 70px;
-    }
     .options-container {
-        gap: 100px;
         padding: 10px 10px;
+        gap: 60px;
     }
-    .square.highlight-brilliant::before {
-        font-size: 10px;
-        top: -12px;
-        left: 4px;
-        padding: 1px 4px;
+    .options-container::before {
+        width: 200%;
+        border-radius: 30px;
     }
-    .square.highlight-forced::after {
-        scale: 0.12;
-        top: -20px;
-        left: 12px;
+    .options-button {
+        scale: 0.05;
+    }
+    .flip-button,
+    .reset {
+        scale: 0.06;
+        transform: translateY(-70px);
+    }
+    .options-container:hover .flip-button,
+    .options-container:hover .reset {
+        transform: translateY(0px);
+    }
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    li {
+        margin-left: 0;
+        margin-bottom: 6px;
+    }
+    .brilliant,
+    .great,
+    .best,
+    .excellent,
+    .good,
+    .book,
+    .inaccuracy,
+    .mistake,
+    .miss,
+    .blunder {
+        font-size: 13px;
     }
 }
