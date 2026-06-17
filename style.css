@@ -1121,7 +1121,7 @@ a:focus::after {
         margin-left: 5px;
     }
     .title {
-        font-size: 24px;
+        font-size: 30px;
         padding-left: 8px;
         padding-top: 6px;
         padding-bottom: 6px;
@@ -1131,73 +1131,62 @@ a:focus::after {
         padding: 5px;
         font-size: 11px;
     }
-    .brilliant:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
+
+    /* Remove move label hover effect entirely on small screens */
+    .brilliant,
+    .great,
+    .best,
+    .excellent,
+    .good,
+    .book,
+    .inaccuracy,
+    .mistake,
+    .miss,
+    .blunder {
+        font-size: 11px;
+        background-image: none;
     }
-    .great:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .best:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .excellent:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .good:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .book:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .inaccuracy:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .mistake:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
-    .miss:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
-    }
+    .brilliant:hover,
+    .great:hover,
+    .best:hover,
+    .excellent:hover,
+    .good:hover,
+    .book:hover,
+    .inaccuracy:hover,
+    .mistake:hover,
+    .miss:hover,
     .blunder:hover {
-        background-size: 13px 13px;
-        padding-left: 15px;
+        background-size: 0px 0px;
+        padding-left: 0;
     }
+
     .chess-board {
-        grid-template-columns: repeat(8, 38px);
-        grid-template-rows: repeat(8, 38px);
+        grid-template-columns: repeat(8, 32px);
+        grid-template-rows: repeat(8, 32px);
         border-radius: 4px;
     }
     .square {
-        width: 38px;
-        height: 38px;
+        width: 32px;
+        height: 32px;
         border-radius: 2px;
     }
     .square img {
-        width: 33px;
-        height: 33px;
+        width: 28px;
+        height: 28px;
     }
     .square.highlight-forced::after {
-        top: -19px;
-        left: 11px;
-        scale: 0.11;
+        top: -16px;
+        left: 9px;
+        scale: 0.09;
     }
     .square.highlight-brilliant::before {
-        top: -10px;
-        left: 10px;
-        font-size: 8px;
+        top: -9px;
+        left: 8px;
+        font-size: 7px;
         padding: 1px 2px;
     }
     .square.highlight-brilliant::after {
-        scale: 0.016;
+        scale: 0.013;
     }
     .square.highlight-great::after,
     .square.highlight-best::after,
@@ -1208,10 +1197,11 @@ a:focus::after {
     .square.highlight-mistake::after,
     .square.highlight-miss::after,
     .square.highlight-blunder::after {
-        top: -24px;
-        left: 7px;
-        scale: 0.008;
+        top: -20px;
+        left: 5px;
+        scale: 0.007;
     }
+
     .main-container {
         gap: 6px;
     }
@@ -1226,6 +1216,8 @@ a:focus::after {
         font-size: 12px;
         padding-left: 8px;
     }
+
+    /* Buttons: no hover, only active (tap feedback) */
     .analyze-button,
     .next-button,
     .previous-button,
@@ -1234,9 +1226,25 @@ a:focus::after {
         padding: 8px 16px;
         font-size: 12px;
         border-radius: 24px;
-        box-shadow: 1px 1px 1px black;
+        box-shadow: 3px 4px 2px black;
         margin-bottom: 12px;
     }
+    .analyze-button:hover,
+    .next-button:hover,
+    .previous-button:hover,
+    .end-button:hover,
+    .start-button:hover {
+        box-shadow: 3px 4px 2px black;
+    }
+    .analyze-button:active,
+    .next-button:active,
+    .previous-button:active,
+    .end-button:active,
+    .start-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0.5px 1px 1px black;
+    }
+
     .button-container {
         gap: 16px;
         flex-wrap: wrap;
@@ -1247,29 +1255,62 @@ a:focus::after {
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .board-options {
-        gap: 24px;
+        gap: 26px;
     }
     .options-container {
         padding: 8px 8px;
-        gap: 50px;
+        gap: 100px; /* tighter gap between flip and reset */
     }
     .options-container::before {
-        width: 180%;
+        width: 200%;
+        height: 17%;
         border-radius: 24px;
+        transition: height 0.3s ease;
+    }
+
+    /* Settings gear: no hover spin, only click via JS .is-open class */
+    .options-container:hover::before {
+        height: 17%; /* disable hover expand */
+    }
+    .options-container.is-open::before {
+        height: 100%;
     }
     .options-button {
         scale: 0.042;
     }
+    .options-button::after {
+        transform: rotate(0deg);
+    }
+    .options-container:hover .options-button::after {
+        transform: rotate(0deg); /* disable hover spin */
+    }
+    .options-container.is-open .options-button::after {
+        transform: rotate(180deg);
+    }
+
+    /* Flip & reset: hidden until .is-open, revealed on click (not hover) */
     .flip-button,
     .reset {
         scale: 0.05;
         transform: translateY(-60px);
+        opacity: 0;
+        pointer-events: none;
     }
     .options-container:hover .flip-button,
     .options-container:hover .reset {
-        transform: translateY(0px);
+        transform: translateY(-60px); /* disable hover reveal */
+        opacity: 0;
+        pointer-events: none;
     }
+    .options-container.is-open .flip-button,
+    .options-container.is-open .reset {
+        transform: translateY(0px);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
     ul {
         flex-direction: column;
         align-items: center;
@@ -1277,17 +1318,5 @@ a:focus::after {
     li {
         margin-left: 0;
         margin-bottom: 4px;
-    }
-    .brilliant,
-    .great,
-    .best,
-    .excellent,
-    .good,
-    .book,
-    .inaccuracy,
-    .mistake,
-    .miss,
-    .blunder {
-        font-size: 11px;
     }
 }
