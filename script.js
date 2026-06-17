@@ -30,7 +30,7 @@ function initEngine() {
     "[Engine] Attempting to create Worker('stockfish-18-single-lite.js')...",
   );
   try {
-    engine = new Worker("stockfish-18-single.js");
+    engine = new Worker("stockfish-18-single-lite.js");
     console.log("[Engine] Worker object created:", engine);
   } catch (err) {
     console.error("[Engine] Failed to create Worker:", err);
