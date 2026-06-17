@@ -1104,3 +1104,190 @@ a:focus::after {
         font-size: 13px;
     }
 }
+
+@media (max-width: 400px) {
+    .navbar {
+        padding: 8px;
+        gap: 8px;
+        font-size: 11px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .header {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .title-container {
+        margin-left: 5px;
+    }
+    .title {
+        font-size: 24px;
+        padding-left: 8px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        position: relative;
+    }
+    .content {
+        padding: 5px;
+        font-size: 11px;
+    }
+    .brilliant:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .great:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .best:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .excellent:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .good:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .book:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .inaccuracy:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .mistake:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .miss:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .blunder:hover {
+        background-size: 13px 13px;
+        padding-left: 15px;
+    }
+    .chess-board {
+        grid-template-columns: repeat(8, 38px);
+        grid-template-rows: repeat(8, 38px);
+        border-radius: 4px;
+    }
+    .square {
+        width: 38px;
+        height: 38px;
+        border-radius: 2px;
+    }
+    .square img {
+        width: 33px;
+        height: 33px;
+    }
+    .square.highlight-forced::after {
+        top: -19px;
+        left: 11px;
+        scale: 0.11;
+    }
+    .square.highlight-brilliant::before {
+        top: -10px;
+        left: 10px;
+        font-size: 8px;
+        padding: 1px 2px;
+    }
+    .square.highlight-brilliant::after {
+        scale: 0.016;
+    }
+    .square.highlight-great::after,
+    .square.highlight-best::after,
+    .square.highlight-excellent::after,
+    .square.highlight-good::after,
+    .square.highlight-book::after,
+    .square.highlight-inaccuracy::after,
+    .square.highlight-mistake::after,
+    .square.highlight-miss::after,
+    .square.highlight-blunder::after {
+        top: -24px;
+        left: 7px;
+        scale: 0.008;
+    }
+    .main-container {
+        gap: 6px;
+    }
+    .board {
+        gap: 14px;
+    }
+    .input-container {
+        width: 95vw;
+    }
+    .input {
+        line-height: 32px;
+        font-size: 12px;
+        padding-left: 8px;
+    }
+    .analyze-button,
+    .next-button,
+    .previous-button,
+    .end-button,
+    .start-button {
+        padding: 8px 16px;
+        font-size: 12px;
+        border-radius: 24px;
+        box-shadow: 1px 1px 1px black;
+        margin-bottom: 12px;
+    }
+    .button-container {
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .arrow-buttons {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .board-options {
+        gap: 24px;
+    }
+    .options-container {
+        padding: 8px 8px;
+        gap: 50px;
+    }
+    .options-container::before {
+        width: 180%;
+        border-radius: 24px;
+    }
+    .options-button {
+        scale: 0.042;
+    }
+    .flip-button,
+    .reset {
+        scale: 0.05;
+        transform: translateY(-60px);
+    }
+    .options-container:hover .flip-button,
+    .options-container:hover .reset {
+        transform: translateY(0px);
+    }
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    li {
+        margin-left: 0;
+        margin-bottom: 4px;
+    }
+    .brilliant,
+    .great,
+    .best,
+    .excellent,
+    .good,
+    .book,
+    .inaccuracy,
+    .mistake,
+    .miss,
+    .blunder {
+        font-size: 11px;
+    }
+}
