@@ -883,7 +883,7 @@ a:focus::after {
 
     .options-container {
         padding: 11px 9.5px;
-        gap: 70px;
+        gap: 100px;
     }
 
     .options-container::before {
