@@ -30,7 +30,7 @@ function initEngine() {
     "[Engine] Attempting to create Worker('stockfish-18-single-lite.js')...",
   );
   try {
-    engine = new Worker("stockfish-18-single-lite.js");
+    engine = new Worker("stockfish-18-single.js");
     console.log("[Engine] Worker object created:", engine);
   } catch (err) {
     console.error("[Engine] Failed to create Worker:", err);
@@ -835,3 +835,78 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------
+// MOBILE IMPROVEMENTS
+// ---------------------------------------------------------------------
+
+// 1. Reliable mobile check via CSS media query instead of innerWidth
+const isMobile = () => window.matchMedia("(max-width: 400px)").matches;
+
+// 2. Options panel toggle — replace the previous optionsButton listener
+const optionsContainer = document.querySelector(".options-container");
+const optionsButton = document.querySelector(".options-button");
+
+optionsButton?.addEventListener("click", (e) => {
+  if (isMobile()) {
+    e.stopPropagation();
+    optionsContainer.classList.toggle("is-open");
+  }
+});
+
+// Close panel when tapping outside — but NOT when tapping flip/reset
+document.addEventListener("click", (e) => {
+  if (!isMobile()) return;
+  if (optionsContainer?.contains(e.target)) return;
+  optionsContainer?.classList.remove("is-open");
+});
+
+// Also close panel after flip or reset is tapped
+document.querySelector(".flip-button")?.addEventListener("click", () => {
+  if (isMobile()) optionsContainer?.classList.remove("is-open");
+});
+document.querySelector(".reset")?.addEventListener("click", () => {
+  if (isMobile()) optionsContainer?.classList.remove("is-open");
+});
+
+// 3. Swipe left/right to navigate moves
+const boardEl = document.getElementById("chess-board");
+if (boardEl) {
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  boardEl.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    },
+    { passive: true },
+  );
+
+  boardEl.addEventListener(
+    "touchend",
+    (e) => {
+      if (isAnimating) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+
+      // Only trigger if horizontal swipe dominates (not a scroll)
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+
+      if (dx < 0)
+        goToNext(); // swipe left  → next move
+      else goToPrevious(); // swipe right → previous move
+    },
+    { passive: true },
+  );
+}
+
+// 4. Prevent page scroll when touching the board
+boardEl?.addEventListener(
+  "touchmove",
+  (e) => {
+    e.preventDefault();
+  },
+  { passive: false },
+);
