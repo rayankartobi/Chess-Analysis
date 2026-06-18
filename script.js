@@ -30,7 +30,7 @@ function initEngine() {
     "[Engine] Attempting to create Worker('stockfish-18-single-lite.js')...",
   );
   try {
-    engine = new Worker("stockfish-18-single-lite.js");
+    engine = new Worker("stockfish-18-single.js");
     console.log("[Engine] Worker object created:", engine);
   } catch (err) {
     console.error("[Engine] Failed to create Worker:", err);
@@ -755,12 +755,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Options Container Click Toggle (mobile only)
   const optionsContainer = document.querySelector(".options-container");
-  optionsContainer?.addEventListener("click", (e) => {
+  const optionsButton = document.querySelector(".options-button");
+
+  optionsButton?.addEventListener("click", (e) => {
     if (window.innerWidth <= 400) {
-      // Don't close the panel when clicking flip or reset (they handle their own logic)
-      if (e.target.closest(".flip-button") || e.target.closest(".reset"))
-        return;
+      e.stopPropagation();
       optionsContainer.classList.toggle("is-open");
+    }
+  });
+
+  // Close panel when tapping outside
+  document.addEventListener("click", (e) => {
+    if (window.innerWidth <= 400) {
+      if (!optionsContainer?.contains(e.target)) {
+        optionsContainer?.classList.remove("is-open");
+      }
     }
   });
 
