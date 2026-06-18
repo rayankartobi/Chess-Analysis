@@ -1117,7 +1117,6 @@ a:focus::after {
         font-size: 11px;
     }
 
-    /* Remove move label hover effect entirely on small screens */
     .brilliant,
     .great,
     .best,
@@ -1202,7 +1201,6 @@ a:focus::after {
         padding-left: 8px;
     }
 
-    /* Buttons: no hover, only active (tap feedback) */
     .analyze-button,
     .next-button,
     .previous-button,
@@ -1213,13 +1211,6 @@ a:focus::after {
         border-radius: 24px;
         box-shadow: 3px 4px 2px black;
         margin-bottom: 12px;
-    }
-    .analyze-button:hover,
-    .next-button:hover,
-    .previous-button:hover,
-    .end-button:hover,
-    .start-button:hover {
-        box-shadow: 3px 4px 2px black;
     }
     .analyze-button:active,
     .next-button:active,
@@ -1242,53 +1233,119 @@ a:focus::after {
     }
 
     .board-options {
-        gap: 30px;
-    }
-    .options-container {
-        padding: 8px 8px;
-        gap: 100px; /* tighter gap between flip and reset */
-    }
-    .options-container::before {
-        width: 200%;
-        height: 17%;
-        border-radius: 24px;
-        transition: height 0.3s ease;
+        gap: 20px;
     }
 
-    /* Settings gear: no hover spin, only click via JS .is-open class */
+    /* Options container — fixed width background, tight gap */
+    .options-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 8px;
+        gap: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .options-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%; /* fixed width instead of % */
+        height: 25%; /* covers just the gear button */
+        background-color: #e7e1b1;
+        border-radius: 24px;
+        transition: height 0.3s ease;
+        z-index: 0;
+    }
     .options-container:hover::before {
-        height: 17%; /* disable hover expand */
+        height: 25%; /* lock height on hover — mobile has no hover */
     }
     .options-container.is-open::before {
-        height: 100%;
+        height: 100%; /* expands to cover gear + flip + reset */
     }
+
+    /* Gear button — real 44px tap target */
     .options-button {
-        scale: 0.042;
+        scale: 1;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        border: none;
+        background: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
     }
     .options-button::after {
+        content: url(settings.png);
+        position: absolute;
+        display: block;
+        scale: 0.042;
         transform: rotate(0deg);
+        transition: transform 0.5s ease;
+        transform-origin: center;
     }
     .options-container:hover .options-button::after {
-        transform: rotate(0deg); /* disable hover spin */
+        transform: rotate(0deg);
     }
     .options-container.is-open .options-button::after {
         transform: rotate(180deg);
     }
 
-    /* Flip & reset: hidden until .is-open, revealed on click (not hover) */
+    /* Flip & reset — real 44px tap targets */
     .flip-button,
     .reset {
-        scale: 0.05;
-        transform: translateY(-60px);
+        scale: 1.2;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        border: none;
+        background: none;
+        cursor: pointer;
         opacity: 0;
+        transform: translateY(-20px);
         pointer-events: none;
+        transition:
+            opacity 0.25s ease,
+            transform 0.25s ease;
+        -webkit-tap-highlight-color: transparent;
     }
+    .flip-button::after {
+        content: url(flip-chessboard.png);
+        position: absolute;
+        scale: 0.05;
+        transition: transform 0.5s ease;
+        transform-origin: center;
+    }
+    .flip-button.is-flipped::after {
+        transform: rotateX(180deg);
+    }
+    .reset::after {
+        content: url(reset.png);
+        position: absolute;
+        scale: 0.05;
+    }
+    .reset.is-resetting::after {
+        animation: reset 0.6s ease forwards;
+    }
+    /* Disable hover reveal on mobile */
     .options-container:hover .flip-button,
     .options-container:hover .reset {
-        transform: translateY(-60px); /* disable hover reveal */
+        transform: translateY(-20px);
         opacity: 0;
         pointer-events: none;
     }
+    /* Show on click via JS .is-open */
     .options-container.is-open .flip-button,
     .options-container.is-open .reset {
         transform: translateY(0px);
