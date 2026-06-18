@@ -883,7 +883,7 @@ a:focus::after {
 
     .options-container {
         padding: 11px 9.5px;
-        gap: 100px;
+        gap: 70px;
     }
 
     .options-container::before {
@@ -1242,7 +1242,7 @@ a:focus::after {
     }
 
     .board-options {
-        gap: 60px;
+        gap: 50px;
     }
     .options-container {
         padding: 8px 8px;
