@@ -500,7 +500,7 @@ a:focus::after {
 
 .analyze-button {
     transition: all 0.3s ease;
-    box-shadow: 2px 2.5px 1px black;
+    box-shadow: 3px 4px 2px black;
     margin-bottom: 20px;
     padding: 15px 50px;
     border: none;
@@ -511,9 +511,6 @@ a:focus::after {
     font-size: 16px;
     cursor: pointer;
 }
-.analyze-button:hover {
-    box-shadow: 3px 4px 2px black;
-}
 .analyze-button:active {
     transform: translate(2px, 2px);
     box-shadow: 0.5px 1px 1px black;
@@ -521,7 +518,7 @@ a:focus::after {
 
 .next-button {
     transition: all 0.3s ease;
-    box-shadow: 2px 2.5px 1px black;
+    box-shadow: 3px 4px 2px black;
     margin-bottom: 20px;
     padding: 15px 50px;
     border: none;
@@ -535,9 +532,6 @@ a:focus::after {
 .next-button::after {
     content: url(arrow-right.png);
 }
-.next-button:hover {
-    box-shadow: 3px 4px 2px black;
-}
 .next-button:active {
     transform: translate(2px, 2px);
     box-shadow: 0.5px 1px 1px black;
@@ -545,7 +539,7 @@ a:focus::after {
 
 .previous-button {
     transition: all 0.3s ease;
-    box-shadow: 2px 2.5px 1px black;
+    box-shadow: 3px 4px 2px black;
     margin-bottom: 20px;
     padding: 15px 50px;
     border: none;
@@ -559,9 +553,6 @@ a:focus::after {
 .previous-button::after {
     content: url(arrow-left.png);
 }
-.previous-button:hover {
-    box-shadow: 3px 4px 2px black;
-}
 .previous-button:active {
     transform: translate(2px, 2px);
     box-shadow: 0.5px 1px 1px black;
@@ -569,7 +560,7 @@ a:focus::after {
 
 .end-button {
     transition: all 0.3s ease;
-    box-shadow: 2px 2.5px 1px black;
+    box-shadow: 3px 4px 2px black;
     margin-bottom: 20px;
     padding: 15px 50px;
     border: none;
@@ -583,9 +574,6 @@ a:focus::after {
 .end-button::after {
     content: url(arrow-end.png);
 }
-.end-button:hover {
-    box-shadow: 3px 4px 2px black;
-}
 .end-button:active {
     transform: translate(2px, 2px);
     box-shadow: 0.5px 1px 1px black;
@@ -593,7 +581,7 @@ a:focus::after {
 
 .start-button {
     transition: all 0.3s ease;
-    box-shadow: 2px 2.5px 1px black;
+    box-shadow: 3px 4px 2px black;
     margin-bottom: 20px;
     padding: 15px 50px;
     border: none;
@@ -606,9 +594,6 @@ a:focus::after {
 }
 .start-button::after {
     content: url(arrow-start.png);
-}
-.start-button:hover {
-    box-shadow: 3px 4px 2px black;
 }
 .start-button:active {
     transform: translate(2px, 2px);
@@ -750,8 +735,8 @@ a:focus::after {
     }
 
     .title {
-        font-size: 28px;
-        padding-left: 100px;
+        font-size: 34px;
+        padding-left: 180px;
         padding-top: 10px;
         padding-bottom: 10px;
     }
@@ -881,7 +866,7 @@ a:focus::after {
     .start-button {
         padding: 11px 34px;
         font-size: 14px;
-        box-shadow: 1.5px 2px 1px black;
+        box-shadow: 3px 4px 2px black;
     }
 
     .button-container {
@@ -1048,7 +1033,7 @@ a:focus::after {
         padding: 11px 26px;
         font-size: 14px;
         border-radius: 30px;
-        box-shadow: 1px 1.5px 1px black;
+        box-shadow: 3px 4px 2px black;
     }
     .button-container {
         gap: 30px;
