@@ -30,7 +30,7 @@ function initEngine() {
     "[Engine] Attempting to create Worker('stockfish-18-single-lite.js')...",
   );
   try {
-    engine = new Worker("stockfish-18-single.js");
+    engine = new Worker("stockfish-18-lite-single.js");
     console.log("[Engine] Worker object created:", engine);
   } catch (err) {
     console.error("[Engine] Failed to create Worker:", err);
@@ -154,88 +154,57 @@ function convertChessJsBoard(board) {
 // ---------------------------------------------------------------------
 // STOCKFISH ANALYSIS — MultiPV 2
 // ---------------------------------------------------------------------
-let engineBusy = false;
-const engineQueue = [];
-
-function runNextInQueue() {
-  if (engineBusy || engineQueue.length === 0) return;
-  engineBusy = true;
-  const { task, resolve } = engineQueue.shift();
-  task(resolve);
-}
-
 function getStockfishAnalysis(fen, depth = 10) {
   return new Promise((resolve) => {
-    engineQueue.push({
-      resolve,
-      task: (done) => {
-        if (!engine) {
-          done({ bestEval: 0, secondEval: null, bestMove: null });
-          engineBusy = false;
-          runNextInQueue();
-          return;
+    if (!engine) {
+      console.warn(
+        "[Analysis] No engine available — returning defaults for FEN:",
+        fen,
+      );
+      resolve({ bestEval: 0, secondEval: null, bestMove: null });
+      return;
+    }
+
+    const scores = {};
+    let bestMove = null;
+
+    engine.onmessage = function (event) {
+      const line = typeof event === "string" ? event : event.data;
+
+      const multipvMatch = line.match(/multipv (\d+)/);
+      const cpMatch = line.match(/score cp (-?\d+)/);
+      const mateMatch = line.match(/score mate (-?\d+)/);
+
+      if (multipvMatch && (cpMatch || mateMatch)) {
+        const idx = parseInt(multipvMatch[1]);
+        let score;
+        if (cpMatch) {
+          score = parseInt(cpMatch[1]);
+        } else {
+          const m = parseInt(mateMatch[1]);
+          score = m > 0 ? 10000 : -10000;
         }
+        scores[idx] = score;
+      }
 
-        const scores = {};
-        let bestMove = null;
-        let settled = false;
+      if (line.startsWith("bestmove")) {
+        const parts = line.split(" ");
+        bestMove = parts[1];
 
-        // Timeout — mobile engines can stall; give up after 15s per position
-        const timeout = setTimeout(() => {
-          if (settled) return;
-          settled = true;
-          console.warn("[Engine] Timeout on FEN:", fen);
-          done({ bestEval: 0, secondEval: null, bestMove: null });
-          engineBusy = false;
-          runNextInQueue();
-        }, 15000);
-
-        engine.onmessage = function (event) {
-          const line = typeof event === "string" ? event : event.data;
-
-          const multipvMatch = line.match(/multipv (\d+)/);
-          const cpMatch = line.match(/score cp (-?\d+)/);
-          const mateMatch = line.match(/score mate (-?\d+)/);
-
-          if (multipvMatch && (cpMatch || mateMatch)) {
-            const idx = parseInt(multipvMatch[1]);
-            let score;
-            if (cpMatch) {
-              score = parseInt(cpMatch[1]);
-            } else {
-              const m = parseInt(mateMatch[1]);
-              score = m > 0 ? 10000 : -10000;
-            }
-            scores[idx] = score;
-          }
-
-          if (line.startsWith("bestmove")) {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timeout);
-
-            const parts = line.split(" ");
-            bestMove = parts[1];
-
-            done({
-              bestEval: scores[1] !== undefined ? scores[1] : 0,
-              secondEval: scores[2] !== undefined ? scores[2] : null,
-              bestMove,
-            });
-
-            engineBusy = false;
-            runNextInQueue();
-          }
+        const result = {
+          bestEval: scores[1] !== undefined ? scores[1] : 0,
+          secondEval: scores[2] !== undefined ? scores[2] : null,
+          bestMove: bestMove,
         };
 
-        // Don't reset engine state between positions — just set position and go
-        engine.postMessage("setoption name MultiPV value 2");
-        engine.postMessage(`position fen ${fen}`);
-        engine.postMessage(`go depth ${depth}`);
-      },
-    });
+        resolve(result);
+      }
+    };
 
-    runNextInQueue();
+    engine.postMessage("setoption name MultiPV value 2");
+    engine.postMessage("ucinewgame");
+    engine.postMessage(`position fen ${fen}`);
+    engine.postMessage(`go depth ${depth}`);
   });
 }
 
