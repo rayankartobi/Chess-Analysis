@@ -154,57 +154,88 @@ function convertChessJsBoard(board) {
 // ---------------------------------------------------------------------
 // STOCKFISH ANALYSIS — MultiPV 2
 // ---------------------------------------------------------------------
+let engineBusy = false;
+const engineQueue = [];
+
+function runNextInQueue() {
+  if (engineBusy || engineQueue.length === 0) return;
+  engineBusy = true;
+  const { task, resolve } = engineQueue.shift();
+  task(resolve);
+}
+
 function getStockfishAnalysis(fen, depth = 10) {
   return new Promise((resolve) => {
-    if (!engine) {
-      console.warn(
-        "[Analysis] No engine available — returning defaults for FEN:",
-        fen,
-      );
-      resolve({ bestEval: 0, secondEval: null, bestMove: null });
-      return;
-    }
-
-    const scores = {};
-    let bestMove = null;
-
-    engine.onmessage = function (event) {
-      const line = typeof event === "string" ? event : event.data;
-
-      const multipvMatch = line.match(/multipv (\d+)/);
-      const cpMatch = line.match(/score cp (-?\d+)/);
-      const mateMatch = line.match(/score mate (-?\d+)/);
-
-      if (multipvMatch && (cpMatch || mateMatch)) {
-        const idx = parseInt(multipvMatch[1]);
-        let score;
-        if (cpMatch) {
-          score = parseInt(cpMatch[1]);
-        } else {
-          const m = parseInt(mateMatch[1]);
-          score = m > 0 ? 10000 : -10000;
+    engineQueue.push({
+      resolve,
+      task: (done) => {
+        if (!engine) {
+          done({ bestEval: 0, secondEval: null, bestMove: null });
+          engineBusy = false;
+          runNextInQueue();
+          return;
         }
-        scores[idx] = score;
-      }
 
-      if (line.startsWith("bestmove")) {
-        const parts = line.split(" ");
-        bestMove = parts[1];
+        const scores = {};
+        let bestMove = null;
+        let settled = false;
 
-        const result = {
-          bestEval: scores[1] !== undefined ? scores[1] : 0,
-          secondEval: scores[2] !== undefined ? scores[2] : null,
-          bestMove: bestMove,
+        // Timeout — mobile engines can stall; give up after 15s per position
+        const timeout = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          console.warn("[Engine] Timeout on FEN:", fen);
+          done({ bestEval: 0, secondEval: null, bestMove: null });
+          engineBusy = false;
+          runNextInQueue();
+        }, 15000);
+
+        engine.onmessage = function (event) {
+          const line = typeof event === "string" ? event : event.data;
+
+          const multipvMatch = line.match(/multipv (\d+)/);
+          const cpMatch = line.match(/score cp (-?\d+)/);
+          const mateMatch = line.match(/score mate (-?\d+)/);
+
+          if (multipvMatch && (cpMatch || mateMatch)) {
+            const idx = parseInt(multipvMatch[1]);
+            let score;
+            if (cpMatch) {
+              score = parseInt(cpMatch[1]);
+            } else {
+              const m = parseInt(mateMatch[1]);
+              score = m > 0 ? 10000 : -10000;
+            }
+            scores[idx] = score;
+          }
+
+          if (line.startsWith("bestmove")) {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeout);
+
+            const parts = line.split(" ");
+            bestMove = parts[1];
+
+            done({
+              bestEval: scores[1] !== undefined ? scores[1] : 0,
+              secondEval: scores[2] !== undefined ? scores[2] : null,
+              bestMove,
+            });
+
+            engineBusy = false;
+            runNextInQueue();
+          }
         };
 
-        resolve(result);
-      }
-    };
+        // Don't reset engine state between positions — just set position and go
+        engine.postMessage("setoption name MultiPV value 2");
+        engine.postMessage(`position fen ${fen}`);
+        engine.postMessage(`go depth ${depth}`);
+      },
+    });
 
-    engine.postMessage("setoption name MultiPV value 2");
-    engine.postMessage("ucinewgame");
-    engine.postMessage(`position fen ${fen}`);
-    engine.postMessage(`go depth ${depth}`);
+    runNextInQueue();
   });
 }
 
@@ -835,78 +866,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-// ---------------------------------------------------------------------
-// MOBILE IMPROVEMENTS
-// ---------------------------------------------------------------------
-
-// 1. Reliable mobile check via CSS media query instead of innerWidth
-const isMobile = () => window.matchMedia("(max-width: 400px)").matches;
-
-// 2. Options panel toggle — replace the previous optionsButton listener
-const optionsContainer = document.querySelector(".options-container");
-const optionsButton = document.querySelector(".options-button");
-
-optionsButton?.addEventListener("click", (e) => {
-  if (isMobile()) {
-    e.stopPropagation();
-    optionsContainer.classList.toggle("is-open");
-  }
-});
-
-// Close panel when tapping outside — but NOT when tapping flip/reset
-document.addEventListener("click", (e) => {
-  if (!isMobile()) return;
-  if (optionsContainer?.contains(e.target)) return;
-  optionsContainer?.classList.remove("is-open");
-});
-
-// Also close panel after flip or reset is tapped
-document.querySelector(".flip-button")?.addEventListener("click", () => {
-  if (isMobile()) optionsContainer?.classList.remove("is-open");
-});
-document.querySelector(".reset")?.addEventListener("click", () => {
-  if (isMobile()) optionsContainer?.classList.remove("is-open");
-});
-
-// 3. Swipe left/right to navigate moves
-const boardEl = document.getElementById("chess-board");
-if (boardEl) {
-  let touchStartX = 0;
-  let touchStartY = 0;
-
-  boardEl.addEventListener(
-    "touchstart",
-    (e) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    },
-    { passive: true },
-  );
-
-  boardEl.addEventListener(
-    "touchend",
-    (e) => {
-      if (isAnimating) return;
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-
-      // Only trigger if horizontal swipe dominates (not a scroll)
-      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-
-      if (dx < 0)
-        goToNext(); // swipe left  → next move
-      else goToPrevious(); // swipe right → previous move
-    },
-    { passive: true },
-  );
-}
-
-// 4. Prevent page scroll when touching the board
-boardEl?.addEventListener(
-  "touchmove",
-  (e) => {
-    e.preventDefault();
-  },
-  { passive: false },
-);
